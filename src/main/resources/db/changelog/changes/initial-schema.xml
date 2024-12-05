@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="inigoCG">
+        <createTable tableName="roles">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="inigoCG">
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="role_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="inigoCG">
+        <createTable tableName="students">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="enrollment_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="varchar(255)">
+                <constraints nullable="false" /></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="inigoCG">
+        <createTable tableName="teachers">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="hire_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="department_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="inigoCG">
+        <createTable tableName="departments">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="head" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="6" author="inigoCG">
+        <createTable tableName="enrollments">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="student_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="course_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="enrollment_date" type="date">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="7" author="inigoCG">
+        <createTable tableName="grades">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="enrollment_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="grade" type="decimal">
+                <constraints nullable="false" />
+            </column>
+            <column name="grade_date" type="date">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="8" author="inigoCG">
+        <createTable tableName="courses">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="true" />
+            </column>
+            <column name="teacher_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="9" author="inigoCG">
+        <createTable tableName="attendances">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="student_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="course_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="attendance_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="10" author="InigoCG">
+        <addForeignKeyConstraint
+            baseTableName="users"
+            baseColumnNames="role_id"
+            referencedTableName="roles"
+            referencedColumnNames="id"
+            constraintName="fk_user_role" />
+        <addForeignKeyConstraint
+            baseTableName="students"
+            baseColumnNames="user_id"
+            constraintName="fk_student_user"
+            referencedTableName="users"
+            referencedColumnNames="id" />
+        <addForeignKeyConstraint
+            baseTableName="teachers"
+            baseColumnNames="user_id"
+            constraintName="fk_teacher_user"
+            referencedTableName="users"
+            referencedColumnNames="id" />
+        <addForeignKeyConstraint
+            baseTableName="teachers"
+            baseColumnNames="department_id"
+            constraintName="fk_teacher_department"
+            referencedTableName="departments"
+            referencedColumnNames="id" />
+        <addForeignKeyConstraint
+            baseTableName="enrollments"
+            baseColumnNames="student_id"
+            constraintName="fk_enrollment_student"
+            referencedTableName="student"
+            referencedColumnNames="id" />
+        <addForeignKeyConstraint
+            baseTableName="enrollments"
+            baseColumnNames="course_id"
+            constraintName="fk_enrollment_course"
+            referencedTableName="courses"
+            referencedColumnNames="id" />
+        <addForeignKeyConstraint
+            baseTableName="courses"
+            baseColumnNames="teacher_id"
+            constraintName="fk_course_teacher"
+            referencedTableName="teachers"
+            referencedColumnNames="id" />
+        <addForeignKeyConstraint
+            baseTableName="grades"
+            baseColumnNames="enrollment_id"
+            constraintName="fk_grade_enrollment"
+            referencedTableName="enrollments"
+            referencedColumnNames="id" />
+        <addForeignKeyConstraint
+            baseTableName="attendances"
+            baseColumnNames="student_id"
+            constraintName="fk_attendance_student"
+            referencedTableName="students"
+            referencedColumnNames="id" />
+        <addForeignKeyConstraint
+            baseTableName="attendances"
+            baseColumnNames="course_id"
+            constraintName="fk_attendance_course"
+            referencedTableName="courses"
+            referencedColumnNames="id" />
+    </changeSet>
+
+</databaseChangeLog>
